@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aprenda a Estrutura Básica Web</title>
+
+  <!-- =========================================================
+       CSS (ESTILIZAÇÃO)
+       Aqui definimos as cores, tamanhos, fontes e layout.
+  ========================================================== -->
+  <style>
+    /* 1. Variáveis globais para facilitar cores e temas */
+    :root {
+      --bg-color: #f3f4f6;
+      --card-bg: #ffffff;
+      --text-color: #1f2937;
+      --primary-color: #2563eb;
+      --primary-hover: #1d4ed8;
+      --border-color: #e5e7eb;
+    }
+
+    /* Tema escuro ativado via classe no <body> */
+    body.dark-mode {
+      --bg-color: #111827;
+      --card-bg: #1f2937;
+      --text-color: #f9fafb;
+      --border-color: #374151;
+    }
+
+    /* 2. Reset básico e estilo global */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      padding: 20px;
+      line-height: 1.6;
+    }
+
+    /* 3. Estrutura do Conteúdo */
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid var(--border-color);
+    }
+
+    /* 4. Estilo dos Cartões (Boxes) */
+    .card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .card h2 {
+      margin-bottom: 12px;
+      font-size: 1.25rem;
+    }
+
+    /* 5. Estilos de Botões e Inputs */
+    button {
+      background-color: var(--primary-color);
+      color: #ffffff;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background-color: var(--primary-hover);
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      margin-top: 8px;
+      font-size: 1rem;
+    }
+
+    /* 6. Caixa Interativa de Estilo */
+    #caixa-amostra {
+      width: 100%;
+      height: 100px;
+      background-color: #3b82f6;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      margin-top: 15px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    .destaque {
+      background-color: #ef4444 !important;
+      border-radius: 50px !important;
+      transform: scale(0.95);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =========================================================
+       HTML (ESTRUTURA)
+       O "esqueleto" que organiza os textos e componentes.
+  ========================================================== -->
+  <div class="container">
+    
+    <header>
+      <h1>Minha Primeira Página</h1>
+      <!-- Botão que aciona a troca de tema -->
+      <button id="btn-tema">Mudar Tema</button>
+    </header>
+
+    <main>
+      <!-- Exemplo 1: Contador (Manipulação de Números e Texto) -->
+      <section class="card">
+        <h2>1. Contador de Cliques</h2>
+        <p>Cliques registrados: <strong id="valor-contador">0</strong></p>
+        <div style="margin-top: 10px;">
+          <button id="btn-incrementar">Clique aqui (+1)</button>
+          <button id="btn-zerar" style="background-color: #6b7280;">Zerar</button>
+        </div>
+      </section>
+
+      <!-- Exemplo 2: Captura de Texto em Tempo Real -->
+      <section class="card">
+        <h2>2. Texto em Tempo Real</h2>
+        <label for="campo-texto">Digite algo abaixo:</label>
+        <input type="text" id="campo-texto" placeholder="Digite seu nome ou uma mensagem...">
+        <p style="margin-top: 10px;">
+          Você digitou: <span id="resultado-texto" style="font-style: italic;">(nada ainda)</span>
+        </p>
+      </section>
+
+      <!-- Exemplo 3: Modificação Visual Dinâmica -->
+      <section class="card">
+        <h2>3. Alterando Estilo com JS</h2>
+        <button id="btn-mudar-estilo">Alternar Estilo da Caixa</button>
+        <div id="caixa-amostra">Caixa Padrão</div>
+      </section>
+    </main>
+
+  </div>
+
+  <!-- =========================================================
+       JAVASCRIPT (INTERATIVIDADE)
+       O "cérebro" que responde aos cliques e ações do usuário.
+  ========================================================== -->
+  <script>
+    // -------------------------------------------------------
+    // INTERATIVIDADE 1: Alternar Tema Claro / Escuro
+    // -------------------------------------------------------
+    const btnTema = document.getElementById('btn-tema');
+    
+    btnTema.addEventListener('click', function() {
+      // Alterna a classe 'dark-mode' no elemento <body>
+      document.body.classList.toggle('dark-mode');
+    });
+
+    // -------------------------------------------------------
+    // INTERATIVIDADE 2: Contador de Cliques
+    // -------------------------------------------------------
+    let totalCliques = 0;
+    const elementoValor = document.getElementById('valor-contador');
+    const btnIncrementar = document.getElementById('btn-incrementar');
+    const btnZerar = document.getElementById('btn-zerar');
+
+    btnIncrementar.addEventListener('click', function() {
+      totalCliques = totalCliques + 1;
+      elementoValor.textContent = totalCliques;
+    });
+
+    btnZerar.addEventListener('click', function() {
+      totalCliques = 0;
+      elementoValor.textContent = totalCliques;
+    });
+
+    // -------------------------------------------------------
+    // INTERATIVIDADE 3: Espelhar Digitação em Tempo Real
+    // -------------------------------------------------------
+    const campoTexto = document.getElementById('campo-texto');
+    const resultadoTexto = document.getElementById('resultado-texto');
+
+    campoTexto.addEventListener('input', function() {
+      // Se estiver vazio, exibe o aviso padrão
+      if (campoTexto.value.trim() === '') {
+        resultadoTexto.textContent = '(nada ainda)';
+      } else {
+        resultadoTexto.textContent = campoTexto.value;
+      }
+    });
+
+    // -------------------------------------------------------
+    // INTERATIVIDADE 4: Alternar Estilos via Classe CSS
+    // -------------------------------------------------------
+    const btnMudarEstilo = document.getElementById('btn-mudar-estilo');
+    const caixaAmostra = document.getElementById('caixa-amostra');
+
+    btnMudarEstilo.addEventListener('click', function() {
+      caixaAmostra.classList.toggle('destaque');
+      
+      if (caixaAmostra.classList.contains('destaque')) {
+        caixaAmostra.textContent = 'Estilo Modificado!';
+      } else {
+        caixaAmostra.textContent = 'Caixa Padrão';
+      }
+    });
+  </script>
+
+</body>
+</html>
